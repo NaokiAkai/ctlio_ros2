@@ -1,0 +1,50 @@
+initial_pose:
+  translation: [0.0, 0.0, 0.0]
+  rotation_matrix: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+
+extrinsics:
+  imu_to_lidar:
+    translation: [0.0110, 0.02329, -0.04412] # livox mid360
+    rotation_matrix: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0] # livox mid360 
+
+imu_params:
+  stationary_sec: 2.0
+  acc_scale: 9.80 # livox
+  # acc_scale: 1.0
+  gravity_acc: 9.80
+
+scan_cloud_preprocess:
+  clip_range: 1.0
+  filter_size: 0.1
+
+normal_map:
+  num_keyframes: 10
+  filter_size: 0.1
+  num_normal_points: 10
+  normal_eigen_val_thresh: 0.2
+
+control_points:
+  control_points_interval: 0.02 # sec
+  num_max_cp: 8
+  # The minimum num is 4
+  # control_points_interval * num_max_cp must be larger than 0.15              
+
+optimization:
+  min_inlier_ratio: 0.95       # %
+  max_correspondence_dist: 1.0 # m
+  sm_huber_delta: 0.1          # m
+  num_max_scan_points: 10000
+  num_max_valid_points: 10000
+  gn_damping_lambda: 0.0
+  prior_dR_sigma: 0.001
+  prior_dp_sigma: 0.001
+  prior_bg_sigma: 0.001
+  prior_ba_sigma: 0.001
+  ct_traj_dR_sigma: 0.00025
+  ct_traj_dp_sigma: 0.00025
+  scan_matching_sigma: 0.05
+  imu_mes_omega_sigma: 0.05
+  imu_mes_acc_sigma: 0.5
+  gyro_bias_rw_sigma: 0.01
+  acc_bias_rw_sigma: 0.01
+

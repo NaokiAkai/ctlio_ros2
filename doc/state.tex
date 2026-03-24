@@ -1,0 +1,61 @@
+
+
+
+
+\section{状態}
+
+まず，本資料で推定対象とする状態は以下である．
+%
+\begin{align}
+  \left( \Phi \left( t^{k}, t^{k+1} \right),
+  {\bf b}_{g}^{k}, {\bf b}_{a}^{k}, {\bf b}_{g}^{k+1}, {\bf b}_{1}^{k+1} \right)
+\end{align}
+%
+$\Phi \left( t^{k}, t^{k+1} \right)$は時刻$t^{k}$から$t^{k+1}$の間の推定に利用される制御点（Control Point）の集合，${\bf b}_{g}, {\bf b}_{a} \in \mathbb{R}^{3}$は各時刻におけるIMUの角速度，加速度バイアスである．
+$\Phi \left( t^{k}, t^{k+1} \right)$には，3次元の回転行列$R \in SO(3)$と並進ベクトル${\bf p} \in \mathbb{R}^{3}$の集合が含まれる．
+
+今ある時刻$t$の姿勢$\left( R(t), {\bf p}(t) \right)$を計算するにあたり，Cumulative B-Splineを用いることとし，3次のSpline曲線を考えることとする．
+このとき，4つの制御点$(R_{0}, {\bf p}_{0}), (R_{1}, {\bf p}_{1}), (R_{2}, {\bf p}_{2}), (R_{3}, {\bf p}_{3})$が選ばれたとする．
+なおそれぞれの制御点に対応する時刻を$t_{0}, t_{1}, t_{2}, t_{3}$とすると，$t_{0} < t_{1} < t_{2} \leq t < t_{3}$となる．
+また，各制御点の時間間隔は等しいものとする．
+このとき，$R(t)$，${\bf p}(t)$はそれぞれ以下の様に計算できる．
+%
+\begin{align}
+  R(t) = R_{0} \prod_{j=1}^{3} {\rm Exp} \left( \lambda_{j}(t) {\rm Log} \left( R_{j-1}^{-1} R_{j} \right) \right)
+  \label{eq:continuous_rotation_matrix}
+\end{align}
+%
+\begin{align}
+  {\bf p}(t) = {\bf p}_{0} + \sum_{j=1}^{3} \lambda_{j}(t) \left( {\bf p}_{j} - {\bf p}_{j-1} \right)
+  \label{eq:continuous_translation_vector}
+\end{align}
+%
+ここで，$\boldsymbol \lambda = \left( \lambda_{1}, \lambda_{2}, \lambda_{3} \right)^{\top} \in \mathbb{R}^{3}$とすると，$\boldsymbol \lambda$は以下のように計算できる．
+%
+\begin{align}
+  u = \frac{t - t_{2}}{t_{3} - t_{2}}
+\end{align}
+%
+\begin{align}
+  {\bf u} = (1, u, u^{2}, u^{3})^{\top} \in \mathbb{R}^{4}
+\end{align}
+%
+\begin{align}
+  \boldsymbol \beta = \frac{1}{6}
+  \left( \begin{matrix}
+    1 & -3 &  3 & -1 \\
+    4 &  0 & -6 &  3 \\
+    1 &  3 &  3 & -3 \\
+    0 &  0 &  0 &  1
+  \end{matrix} \right) {\bf u}
+  \label{eq:b-spline_basis}
+\end{align}
+%
+\begin{align}
+  \boldsymbol \lambda = \left( \beta_{1} + \beta_{2} + \beta_{3}, \beta_{2} + \beta_{3}, \beta_{3} \right)^{\top}
+  \label{eq:b-spline_lambda}
+\end{align}
+%
+なおこれらの変数はすべて時間$t$に依存する変数であるが，表記の簡略化のために$(t)$は削除している．
+以下でも，$\boldsymbol \lambda$は時間に依存した変数となるが，表記の簡略化のために$(t)$を省略する．
+

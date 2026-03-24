@@ -1,0 +1,15 @@
+ctlio_ros2_node:
+  ros__parameters:
+    lidar_type: "livox"
+    param_files_dir: "" # parameters must be located under config directory
+
+    pointcloud_topic: "/livox/lidar"
+    imu_topic: "/livox/imu"
+
+    imu_pose_topic: "/ctlio/imu_pose"
+    imu_odom_topic: "/ctlio/imu_odom"
+    lico_map_cloud_topic: "/ctlio/lio_map_cloud"
+    aligned_scan_cloud_topic: "/ctlio/aligned_scan_cloud"
+
+    odom_frame: "odom"
+    imu_frame: "imu"

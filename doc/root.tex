@@ -1,0 +1,68 @@
+% interactnlmsample.tex
+% v1.05 - August 2017
+
+% \documentclass[]{interact}
+% \documentclass[uplatex,dvipdfmx,a4paper]{jsbook}
+\documentclass[uplatex,dvipdfmx,a4paper]{jsarticle}
+\usepackage[top=30mm, bottom=35mm, left=30mm, right=30mm]{geometry}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{comment}
+
+\usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
+\usepackage[caption=false]{subfig}% Support for small, `sub' figures and tables
+%\usepackage[nolists,tablesfirst]{endfloat}% To `separate' figures and tables from text if required
+%\usepackage[doublespacing]{setspace}% To produce a `double spaced' document if required
+%\setlength\parindent{24pt}% To increase paragraph indentation when line spacing is doubled
+
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{url}
+
+\usepackage[numbers,sort&compress]{natbib}% Citation support using natbib.sty
+\bibpunct[, ]{[}{]}{,}{n}{,}{,}% Citation support using natbib.sty
+\renewcommand\bibfont{\fontsize{10}{12}\selectfont}% Bibliography support using natbib.sty
+\makeatletter% @ becomes a letter
+\def\NAT@def@citea{\def\@citea{\NAT@separator}}% Suppress spaces between citations using natbib.sty
+\makeatother% @ becomes a symbol again
+
+\theoremstyle{plain}% Theorem-like structures provided by amsthm.sty
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{notation}{Notation}
+
+\newcommand{\argmax}{\mathop{\rm argmax}\limits}
+\newcommand{\argmin}{\mathop{\rm argmin}\limits}
+
+\begin{document}
+
+% \articletype{ARTICLE}% Specify the article type or omit as appropriate
+
+\title{Continuous-Time LIOにおけるヤコビアンの導出}
+\author{赤井 直紀%
+  \thanks{名古屋大学，株式会社LOCT}
+}
+
+\maketitle
+
+\input{header}
+\input{state}
+\input{residual}
+\input{smoothness}
+\input{scan_matching}
+\input{imu}
+
+\end{document}

@@ -1,0 +1,215 @@
+\section{制御点の滑らかさの残差に関するヤコビアンの導出}
+\label{sec:smoothness}
+
+式(\ref{eq:smoothness_residual})に示す残差に関するヤコビアン${}^{S}J$は以下となる．
+%
+\begin{align}
+  {}^{S}J = \left( \begin{matrix}
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i-1} } &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial {\bf p}_{i-1} } &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i} } &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial {\bf p}_{i} } &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i+1} } &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial {\bf p}_{i+1} } \\
+    %
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial R_{i-1} } &
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i-1} } &
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial R_{i} } &
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i} } &
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial R_{i+1} } &
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i+1} } 
+  \end{matrix} \right) \in \mathbb{R}^{6 \times 18}
+\end{align}
+%
+なお並進に関するヤコビアンは，式(\ref{eq:smoothness_residual})より明らかに以下となる．
+%
+\begin{align}
+  \begin{gathered}
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i-1} } = I    \\
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i} }   = -2 I \\
+    \frac{ \partial {}^{S}{\bf r}_{p}(t) }{ \partial {\bf p}_{i+1} } = I    \\
+  \end{gathered}
+\end{align}
+%
+また，$\partial {}^{S}{\bf r}_{R}(t) / \partial {\bf p}_{i}$，$\partial {}^{S}{\bf r}_{p}(t) / \partial R_{i}$はすべて零である．
+すなわち${}^{S}J$は以下のように書ける．
+%
+\begin{align}
+  {}^{S}J = \left( \begin{matrix}
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i-1} } &
+    0 &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i} } &
+    0 &
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial R_{i+1} } &
+    0 \\
+    %
+    0 &
+    I &
+    0 &
+    -2 I &
+    0 &
+    I 
+  \end{matrix} \right)
+\end{align}
+%
+よって以下では，回転に関するヤコビアンに関してのみ考える．
+
+まず回転の滑らかさに関する残差を以下の様に記述する．
+%
+\begin{align}
+  \begin{gathered}
+    {}^{S}{\bf r}_{R}(t) = \boldsymbol \phi_{i+1} - \boldsymbol \phi_{i} \\
+    %
+    \boldsymbol \phi_{i} = {\rm Log} \left( R_{i-1}^{-1} R_{i} \right)
+  \end{gathered}
+\end{align}
+%
+ここから，$\boldsymbol \phi_{i}$は$R_{i}$と$R_{i-1}$に依存することがわかる．
+このことから，$\partial {}^{S}{\bf r}_{R}(t) / \partial R_{i}$は，連鎖則を用いてそれぞれ以下の様に変形できる．
+%
+\begin{align}
+  \begin{gathered}
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i-1} }
+    = 
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial \boldsymbol \phi_{i} }
+    \frac{ \partial \boldsymbol \phi_{i} }{ \partial R_{i-1} } \\
+    %
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i} }
+    = 
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial \boldsymbol \phi_{i+1} }
+    \frac{ \partial \boldsymbol \phi_{i+1} }{ \partial R_{i} }
+    +
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial \boldsymbol \phi_{i} }
+    \frac{ \partial \boldsymbol \phi_{i} }{ \partial R_{i} } \\
+    %
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i+1} }
+    = 
+    \frac{ \partial {}^{S}{\bf r}_{R}(t) }{ \partial \boldsymbol \phi_{i+1} }
+    \frac{ \partial \boldsymbol \phi_{i+1} }{ \partial R_{i+1} }
+  \end{gathered}
+\end{align}
+%
+ここからさらに，$\partial \boldsymbol \phi_{i} / \partial R_{i}$と$\partial \boldsymbol \phi_{i+1} / \partial R_{i}$についてさらに考える．
+これらもさらに，連鎖則を用いて以下の様に計算できる．
+%
+\begin{align}
+  \begin{gathered}
+    \frac{ \partial \boldsymbol \phi_{i} }{ \partial R_{i} }
+    = 
+    \frac{ \partial {\rm Log} \left( \Delta R_{i} \right) }{ \partial \Delta R_{i} }
+    \frac{ \partial \Delta R_{i} }{ \partial R_{i} } \\
+    %
+    \frac{ \partial \boldsymbol \phi_{i+1} }{ \partial R_{i} }
+    = 
+    \frac{ \partial {\rm Log} \left( \Delta R_{i+1} \right) }{ \partial \Delta R_{i+1} }
+    \frac{ \partial \Delta R_{i+1} }{ \partial R_{i} } \\
+  \end{gathered}
+\end{align}
+%
+ただし，${\rm Log} \left( \Delta R_{i} \right) = \boldsymbol \phi_{i}$，$\Delta R_{i} = R_{i-1}^{-1} R_{i}$とした．
+
+$\partial {\rm Log} \left( \Delta R_{i} \right) / \partial \Delta R_{i}$を求めるにあたり，以下のように，${\rm Log} \left( \Delta R_{i} \right)$が左摂動で微小変化した場合の変化を一次近似できるヤコビアン$J$について考える．
+%
+\begin{align}
+  {\rm Log} \left( {\rm Exp} \left( \delta \boldsymbol \theta \right) \Delta R_{i} \right)
+  \simeq
+  {\rm Log} \left( \Delta R_{i} \right) + J \delta  \boldsymbol \theta %+ O \left( \left\| \boldsymbol \theta \right\|^{2} \right)
+\end{align}
+%
+このヤコビアンを求めるために，$SO(3)$においては，${\rm Exp} \left( \delta \boldsymbol \theta \right) {\rm Exp} \left( \boldsymbol \theta \right)$が以下の様に左ヤコビアン$J_{l} \left( \cdot \right)$を用いて近似できることを利用する．
+%
+\begin{align}
+  {\rm Exp} \left( \delta \boldsymbol \theta \right) {\rm Exp} \left( \boldsymbol \theta \right)
+  \simeq
+  {\rm Exp} \left( \boldsymbol \theta + J_{l}^{-1} \left( \boldsymbol \theta \right) \delta \boldsymbol \theta \right)
+\end{align}
+%
+ここで$R = {\rm Exp} \left( \boldsymbol \theta \right)$，$\boldsymbol \theta = {\rm Log} (R)$であることを利用し，両辺の${\rm Log}$を取ると以下となる．
+%
+\begin{align}
+  \begin{split}
+    {\rm Log} \left( {\rm Exp} \left( \delta \boldsymbol \theta \right) R \right)
+    & \simeq
+    \boldsymbol \theta + J_{l}^{-1} \left( \boldsymbol \theta \right) \delta \boldsymbol \theta \\
+    %
+    & =
+    {\rm Log} \left( R \right) + J_{l}^{-1} \left( \boldsymbol \theta \right) \delta \boldsymbol \theta \\
+  \end{split}
+\end{align}
+%
+よって$\partial {\rm Log} \left( \Delta R_{i} \right) / \partial \Delta R_{i}$は以下となる．
+%
+\begin{align}
+  \frac{ \partial {\rm Log} \left( \Delta R_{i} \right) }{ \partial \Delta R_{i} }
+  =
+  J_{l}^{-1} \left( \Delta R_{i} \right)
+\end{align}
+
+次に$\partial \Delta R_{i} / \partial R_{i}$と$\partial \Delta R_{i+1} / \partial R_{i}$について考える．
+これらは，例えば$f : SO(3) \rightarrow SO(3)$となる関数に対して，以下を満たすヤコビアン$J$を求めることで計算できる．
+%$
+\begin{align}
+  f \left( {\rm Exp} \left( \delta \boldsymbol \theta \right) R \right) \left( f(R) \right)^{-1} = I + \left( J \delta \boldsymbol \theta \right)^{\wedge} + O \left( \left\| \delta \boldsymbol \theta \right\|^{2} \right)
+\end{align}
+%
+よって，それぞれ以下の計算をすることで求められる．
+%
+\begin{align}
+  \begin{split}
+    & R_{i-1}^{-1} {\rm Exp} \left( \delta \boldsymbol \theta \right) R_{i} \left( R_{i-1}^{-1} R_{i} \right)^{-1} \\
+    %
+    = & R_{i-1}^{-1} {\rm Exp} \left( \delta \boldsymbol \theta \right) R_{i-1} \\
+    %
+    = & {\rm Exp} \left( {\rm Ad}_{ R_{i-1}^{\top} } \delta \boldsymbol \theta \right) \\
+    %
+    = & I + \left( R_{i-1}^{\top} \delta \boldsymbol \theta \right)^{\wedge} + O \left( \left\| \delta \boldsymbol \theta \right\|^{2} \right)
+  \end{split}
+\end{align}
+%
+\begin{align}
+  \begin{split}
+    & \left( {\rm Exp} \left( \delta \boldsymbol \theta \right) R_{i} \right)^{-1} R_{i+1} \left( R_{i}^{-1} R_{i+1} \right)^{-1} \\
+    %
+    = & R_{i}^{-1} {\rm Exp} \left( -\delta \boldsymbol \theta \right) R_{i} \\
+    %
+    = & {\rm Exp} \left( -{\rm Ad}_{ R_{i}^{\top} } \delta \boldsymbol \theta \right) \\
+    %
+    = & I + \left( -R_{i}^{\top} \delta \boldsymbol \theta \right)^{\wedge} + O \left( \left\| \delta \boldsymbol \theta \right\|^{2} \right)
+  \end{split}
+\end{align}
+%
+なお，$SO(3)$の性質である${\rm Ad}_{R} = R$を利用した．
+これらの計算より以下を得る．
+%
+\begin{align}
+  \begin{gathered}
+    \frac{ \partial \Delta R_{i} }{ \partial R_{i} } = R_{i-1}^{\top} \\
+    %
+    \frac{ \partial \Delta R_{i+1} }{ \partial R_{i} } = -R_{i}^{\top} \\
+  \end{gathered}
+\end{align}
+
+最終的に，滑らかさに対して定まる残差の回転に関するヤコビアンとして以下が求められる．
+%
+\begin{align}
+  \begin{gathered}
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i-1} }
+    = 
+    J_{l}^{-1} \left( \boldsymbol \phi_{i} \right) R_{i-1}^{\top} \\
+    %
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i} }
+    = 
+    -J_{l}^{-1} \left( \boldsymbol \phi_{i+1} \right) R_{i}^{\top}
+    -J_{l}^{-1} \left( \boldsymbol \phi_{i} \right) R_{i-1}^{\top} \\
+    +
+    %
+    \frac{ {}^{S}{\bf r}_{R}(t) }{ \partial R_{i+1} }
+    = 
+    J_{l}^{-1} \left( \boldsymbol \phi_{i+1} \right) R_{i}^{\top} \\
+  \end{gathered}
+\end{align}
+
+
+
+
+

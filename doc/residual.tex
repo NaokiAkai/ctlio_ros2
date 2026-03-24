@@ -1,0 +1,55 @@
+\section{残差の定義}
+
+LIOを推定するにあたっては，様々な残差が定義される．
+しかし，回転が絡まない残差に関するヤコビアンは簡単に導出できるものが多いため，そのようなヤコビアンの導出は本資料では省略する．
+本資料でヤコビアンの導出を行う残差は以下の3種類である．
+%
+\begin{align}
+  {}^{S}{\bf r}(t)
+  =
+  \left( \begin{matrix}
+    {}^{S}{\bf r}_{R}(t) \\
+    {}^{S}{\bf r}_{p}(t)
+  \end{matrix} \right)
+  =
+  \left( \begin{matrix}
+    {\rm Log} \left( R_{i}^{-1} R_{i+1} \right) - {\rm Log} \left( R_{i-1} R_{i} \right) \\
+    {\bf p}_{i+1} - 2 {\bf p}_{i} + {\bf p}_{i} \\
+  \end{matrix} \right) \in \mathbb{R}^{6}
+  \label{eq:smoothness_residual}
+\end{align}
+%
+\begin{align}
+  {}^{L}r(t) = {\bf n}^{\top} \left( {}^{M}{\bf p} - \left( R(t) {}^{I}{\bf p} + {\bf p}(t) \right) \right) \in \mathbb{R}
+  \label{eq:scan_matching_residual}
+\end{align}
+%
+\begin{align}
+  {}^{I}{\bf r}(t)
+  =
+  \left( \begin{matrix}
+    {}^{I}{\bf r}_{\omega}(t) \\
+    {}^{I}{\bf r}_{a}(t)
+  \end{matrix} \right)
+  =
+  \left( \begin{matrix}
+    \boldsymbol \omega(t) - {}^{I}\boldsymbol \omega + {\bf b}_{g}^{k+1} \\
+    R(t)^{\top} \left( {\bf a}(t) + {\bf g} \right) - {}^{I}{\bf a} + {\bf b}_{a}^{k+1}
+  \end{matrix} \right) \in \mathbb{R}^{6}
+  \label{eq:imu_residual}
+\end{align}
+%
+
+式(\ref{eq:smoothness_residual})は連続する制御点の滑らかさに関する残差である．
+この残差の最小化は行わなくともLIOは動作するが，制御点の間隔が短くなるとCumulative B-Splineにより表現できる軌跡の自由度が上がり，最適化が不安定になる傾向がある．
+この不安定さを低減させるために制御点の滑らかさに関する残差の最小化は有効になる．
+
+式(\ref{eq:scan_matching_residual})は，スキャンマッチングに関する残差であり，本資料では，地図座標上の点${}^{M}{\bf p}$と，IMU座標上の点${}^{I}{\bf p}$を用いたScan-to-Planeの残差について考える．
+なお，LiDARが計測するLiDAR座標上の点${}^{L}{\bf p}$は，既知のLiDAR-IMU間の座標変換行列${}^{L}T_{I} \in SE(3)$を用いて，${}^{L}{\bf p} = {}^{L}T_{I} {}^{I}{\bf p}$として座標変換されているものとする．
+また${\bf n}$は，${}^{M}{\bf p}$に対応する法線ベクトルである．
+
+
+式(\ref{eq:imu_residual})はIMUの計測に関する残差であり，${}^{I}\boldsymbol \omega$と${}^{I}{\bf a}$はIMUが計測したIMU座標での角速度と加速度，${\bf g}$は重力加速度ベクトルである．
+$\boldsymbol \omega(t)$と${\bf a}(t)$はCumulative B-Splineを用いて表現した軌跡から差出することができる角速度と加速度であり，本資料で対象とするLIOでは，これらの値とIMUの計測値の差分を最小化させる．
+なお角速度や加速度の算出方法は後述する．
+
