@@ -1,5 +1,5 @@
 TARGET = root
-FINAL_TARGET = ct_lio_jacobians
+FINAL_TARGET = ctlio_jacobians
 NKF = -u
 
 all:

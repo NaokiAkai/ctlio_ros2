@@ -2,7 +2,7 @@
 
 **ctlio_ros2** is a ROS2 package for Continuous-Time LiDAR–Inertial Odometry based on a cumulative B-spline on the *SO*(3) Lie group.
 
-The entire optimization pipeline is implemented from scratch, with all Jacobians explicitly derived and implemented analytically by the author. The detailed derivations can be found in **doc/ct_lio_jacobians.pdf** (currently available in Japanese only).
+The entire optimization pipeline is implemented from scratch, with all Jacobians explicitly derived and implemented analytically by the author. The detailed derivations can be found in **doc/ctlio_jacobians.pdf** (currently available in Japanese only).
 
 <p align="center">  <img src="figs/ctlio_result_indoor.png" width="45%" />  <img src="figs/ctlio_result_sakura.png" width="45%" style="margin-left:10px;" /></p>
 
