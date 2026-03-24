@@ -134,18 +134,21 @@ private:
       ParseOusterCloud(msg, rclcpp::Time(msg->header.stamp).seconds(),
         scan_cloud, scan_intensities, scan_stamps);
     } else {
-      ParseLicoRos2Cloud(msg, scan_cloud, scan_intensities, scan_stamps);
+      ParseCtlioRos2Cloud(msg, scan_cloud, scan_intensities, scan_stamps);
     }
 
-    const auto t1 = std::chrono::high_resolution_clock::now();
+    // const auto t1 = std::chrono::high_resolution_clock::now();
 
-    // The main process of LICO
-    lico_.SetScanCloudCtlio(scan_cloud, scan_intensities, scan_stamps);
+    // The main process of CT-LIO
+    lico_.SetScanCloud(scan_cloud, scan_intensities, scan_stamps);
 
-    const auto t2 = std::chrono::high_resolution_clock::now();
-    std::cout << "elapsed time for optimization [msec]: " 
-      << std::chrono::duration_cast<std::chrono::milliseconds>
-         (t2 - t1).count() << std::endl;
+    // const auto t2 = std::chrono::high_resolution_clock::now();
+    // std::cout << "elapsed time for optimization [msec]: " 
+    //   << std::chrono::duration_cast<std::chrono::milliseconds>
+    //      (t2 - t1).count() << std::endl;
+    // Please strictly check the elapsed time for stable operation.
+    // IMU messages will be dropped if the elapsed time exceeds
+    // the LiDAR measurement cycle, and CT-LIO will not function properly.
 
     // Publish ROS messages
     const Sophus::SE3f imu_pose = lico_.GetIMUPose();

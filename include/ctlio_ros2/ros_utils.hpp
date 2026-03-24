@@ -40,7 +40,7 @@ void ParseOusterCloud(
   std::vector<float>& scan_intensities,
   std::vector<double>& scan_stamps);
 
-void ParseLicoRos2Cloud(
+void ParseCtlioRos2Cloud(
   const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg,
   lico::PointCloud3f& scan_cloud,
   std::vector<float>& scan_intensities,

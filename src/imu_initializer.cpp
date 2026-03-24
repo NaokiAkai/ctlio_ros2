@@ -153,7 +153,7 @@ void ImuInitializer::InitializeImu(
 
   std::cout << "Done IMU initialization" << std::endl;
   std::cout << "R\n" << state.R.matrix() << std::endl;
-  std::cout << "v:  " << state.v.transpose() << std::endl;
+  // std::cout << "v:  " << state.v.transpose() << std::endl;
   std::cout << "bg: " << state.bg.transpose() << std::endl;
   std::cout << "ba: " << state.ba.transpose() << std::endl;
   std::cout << "Std" << std::endl;

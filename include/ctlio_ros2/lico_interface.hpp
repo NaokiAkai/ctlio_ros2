@@ -80,6 +80,7 @@ private:
   float min_inlier_ratio_{0.95f};       // %
   float max_correspondence_dist_{1.0f}; // m
   float sm_huber_delta_{0.1f};          // m
+  float optimization_epsilon_{0.1f};
   int num_max_scan_points_{10000};
   int num_max_valid_points_{10000};
   float gn_damping_lambda_{0.0f};
@@ -132,7 +133,7 @@ public:
 
   void SetImuMeasure(const ImuMeasure& measure);
 
-  void SetScanCloudCtlio(
+  void SetScanCloud(
     const PointCloud3f& scan_cloud,
     const std::vector<float>& scan_intensities,
     const std::vector<double>& scan_stamps);

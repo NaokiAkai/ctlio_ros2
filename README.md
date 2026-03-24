@@ -14,7 +14,7 @@ The entire optimization pipeline is implemented from scratch, with all Jacobians
 
 ```bash
 cd your/ros2/ws/src
-git clone <repository_url>
+git clone https://github.com/NaokiAkai/ctlio_ros2.git
 cd ..
 colcon build
 source install/setup.bash

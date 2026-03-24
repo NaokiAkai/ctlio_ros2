@@ -78,6 +78,7 @@ void LicoInterface::ReadParams() {
   min_inlier_ratio_        = config["optimization"]["min_inlier_ratio"].as<float>();
   max_correspondence_dist_ = config["optimization"]["max_correspondence_dist"].as<float>();
   sm_huber_delta_          = config["optimization"]["sm_huber_delta"].as<float>();
+  optimization_epsilon_    = config["optimization"]["optimization_epsilon"].as<float>();
   num_max_scan_points_     = config["optimization"]["num_max_scan_points"].as<int>();
   num_max_valid_points_    = config["optimization"]["num_max_valid_points"].as<int>();
   gn_damping_lambda_       = config["optimization"]["gn_damping_lambda"].as<float>();
@@ -93,7 +94,7 @@ void LicoInterface::ReadParams() {
   gyro_bias_rw_sigma_      = config["optimization"]["gyro_bias_rw_sigma"].as<float>();
   acc_bias_rw_sigma_       = config["optimization"]["acc_bias_rw_sigma"].as<float>();
 
-  std::cout << std::fixed << std::setprecision(8);
+  std::cout << std::fixed << std::setprecision(6);
   std::cout << "===== Parameters Loaded =====" << std::endl;
 
   std::cout << "[Initial Pose]" << std::endl;
@@ -113,9 +114,9 @@ void LicoInterface::ReadParams() {
   std::cout << "  rotation:\n" << Til_.rotationMatrix() << std::endl;
 
   std::cout << "[IMU Params]" << std::endl;
-  std::cout << "  stationary_sec: " << stationary_sec_ << std::endl;
-  std::cout << "  acc_scale     : " << acc_scale_ << std::endl;
-  std::cout << "  gravity_acc   : " << gravity_acc_ << std::endl;
+  std::cout << "  stationary_sec : " << stationary_sec_ << std::endl;
+  std::cout << "  acc_scale      : " << acc_scale_ << std::endl;
+  std::cout << "  gravity_acc    : " << gravity_acc_ << std::endl;
 
   std::cout << "[Scan Preprocess]" << std::endl;
   std::cout << "  clip_range : " << scan_cloud_clip_range_ << std::endl;
@@ -148,8 +149,8 @@ void LicoInterface::ReadParams() {
   std::cout << "  ct_traj_dp_sigma: " << ct_traj_dp_sigma_ << std::endl;
 
   std::cout << "  scan_matching_sigma : " << scan_matching_sigma_ << std::endl;
-  std::cout << "  imu_omega_sigma    : " << imu_mes_omega_sigma_ << std::endl;
-  std::cout << "  imu_acc_sigma      : " << imu_mes_acc_sigma_ << std::endl;
+  std::cout << "  imu_omega_sigma     : " << imu_mes_omega_sigma_ << std::endl;
+  std::cout << "  imu_acc_sigma       : " << imu_mes_acc_sigma_ << std::endl;
 
   std::cout << "  gyro_bias_rw_sigma : " << gyro_bias_rw_sigma_ << std::endl;
   std::cout << "  acc_bias_rw_sigma  : " << acc_bias_rw_sigma_ << std::endl;
@@ -180,7 +181,7 @@ void LicoInterface::SetImuMeasure(const ImuMeasure& measure) {
   }
 }
 
-void LicoInterface::SetScanCloudCtlio(
+void LicoInterface::SetScanCloud(
   const PointCloud3f& scan_cloud,
   const std::vector<float>& scan_intensities,
   const std::vector<double>& scan_stamps)
@@ -612,13 +613,12 @@ void LicoInterface::SetScanCloudCtlio(
     min_eigenvalue_       = eigenvalues(0) / eigenvalues.sum();
     min_eigenvalue_ratio_ = eigenvalues(0) / eigenvalues(2);
 
-    if (iter_num > num_min_iter + num_imu_iter && update_ave < 0.1f) {
+    if (iter_num > num_min_iter + num_imu_iter && update_ave < optimization_epsilon_) {
       // std::cout << "Optimization has converged." << std::endl;
       has_converged_ = true;
       break;
     }
   }
-
 
   if (!has_converged_) {
     std::cout << "Optimization has not been converged." << std::endl;
@@ -631,15 +631,15 @@ void LicoInterface::SetScanCloudCtlio(
   inlier_ratio_ = static_cast<float>(num_corresp_points) / static_cast<float>(num_used_points);
   // const float invalid_ratio = static_cast<float>(num_invalid_points) / static_cast<float>(filtered_scan_cloud.size());
   // const float valid_ratio = static_cast<float>(num_valid_points) / static_cast<float>(filtered_scan_cloud.size());
-  // std::cout << "num_scan_points:     " << filtered_scan_cloud.size() << std::endl;
-  // std::cout << "num_invalid_points:  " << num_invalid_points << std::endl;
-  // std::cout << "num_used_points:     " << num_used_points << std::endl;
-  // std::cout << "num_corresp_points:  " << num_corresp_points << std::endl;
-  // std::cout << "inlier_ratio:        " << inlier_ratio_ << std::endl;
-  // std::cout << "invalid_ratio:       " << invalid_ratio << std::endl;
-  // std::cout << "valid_ratio:         " << valid_ratio << std::endl;
-  // std::cout << "min_eigenvalue:      " << min_eigenvalue_ << std::endl;
-  // std::cout << "min_eigenvalue_ratio:" << min_eigenvalue_ratio_ << std::endl;
+  // std::cout << "num_scan_points:      " << filtered_scan_cloud.size() << std::endl;
+  // std::cout << "num_invalid_points:   " << num_invalid_points << std::endl;
+  // std::cout << "num_used_points:      " << num_used_points << std::endl;
+  // std::cout << "num_corresp_points:   " << num_corresp_points << std::endl;
+  // std::cout << "inlier_ratio:         " << inlier_ratio_ << std::endl;
+  // std::cout << "invalid_ratio:        " << invalid_ratio << std::endl;
+  // std::cout << "valid_ratio:          " << valid_ratio << std::endl;
+  // std::cout << "min_eigenvalue:       " << min_eigenvalue_ << std::endl;
+  // std::cout << "min_eigenvalue_ratio: " << min_eigenvalue_ratio_ << std::endl;
   // std::cout << std::endl;
   
   // Estimate current state and compensate for the odometry state
@@ -694,7 +694,7 @@ void LicoInterface::SetScanCloudCtlio(
   if (control_points_.size() < num_max_cp_) return;
   const size_t erase_num = control_points_.size() - num_max_cp_;
 
-  // Make Marginalized scan before marginalizing control points
+  // Make marginalized scan before marginalizing control points
   PointCloud3f marginalized_scan_cloud;
   marginalized_scan_cloud.reserve(pending_scan_cloud_.size());
   const double commit_stamp = control_points_[erase_num + 3].stamp;

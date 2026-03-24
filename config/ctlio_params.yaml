@@ -33,6 +33,7 @@ optimization:
   min_inlier_ratio: 0.95       # %
   max_correspondence_dist: 1.0 # m
   sm_huber_delta: 0.1          # m
+  optimization_epsilon: 0.1
   num_max_scan_points: 10000
   num_max_valid_points: 10000
   gn_damping_lambda: 0.0
