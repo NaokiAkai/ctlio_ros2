@@ -221,7 +221,8 @@ void LicoInterface::SetScanCloud(
     return;
   }
 
-  // Do not use scan_stamps_ because it loses some scans when the scan is clipped.
+  // Do not use scan_stamps_
+  // because it loses some scans when the scan is clipped.
   const double start_stamp = scan_stamps.front();
   const double end_stamp = scan_stamps.back();
   std::vector<ImuMeasure> relevant_imu_measures;

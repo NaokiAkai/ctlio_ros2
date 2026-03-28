@@ -41,9 +41,9 @@ optimization:
   prior_dp_sigma: 0.001
   prior_bg_sigma: 0.001
   prior_ba_sigma: 0.001
-  ct_traj_dR_sigma: 0.00025
-  ct_traj_dp_sigma: 0.00025
-  scan_matching_sigma: 0.05
+  ct_traj_dR_sigma: 0.00005
+  ct_traj_dp_sigma: 0.00005
+  scan_matching_sigma: 0.025
   imu_mes_omega_sigma: 0.05
   imu_mes_acc_sigma: 0.5
   gyro_bias_rw_sigma: 0.01
