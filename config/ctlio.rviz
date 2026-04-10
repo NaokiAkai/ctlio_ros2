@@ -73,7 +73,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 255
+      Max Intensity: 210
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Aligned scan cloud
@@ -273,7 +273,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 38.00100326538086
+      Distance: 77.95452117919922
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -288,10 +288,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7297974228858948
+      Pitch: 0.9197967052459717
       Target Frame: imu
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.1985578536987305
+      Yaw: 0.5004000067710876
     Saved: ~
 Window Geometry:
   Displays:

@@ -451,7 +451,7 @@ bool BSpline::ComputeMotionAndDerivatives(
   const Eigen::Matrix3f dw_dphi3 = A3.matrix().transpose() *
     (Hat((A1 * A2).matrix().transpose() * lambda_dot[0] * phi1) * Jll3 +
      Hat(A2.matrix().transpose() * lambda_dot[1] * phi2) * Jll3 +
-     Hat(lambda_ddot[2] * phi3) * Jll3 + lambda_dot[2] * I);
+     Hat(lambda_dot[2] * phi3) * Jll3 + lambda_dot[2] * I);
 
   const Eigen::Matrix3f drw_dR0 =                        dw_dphi1 * dphi1_dR0;
   const Eigen::Matrix3f drw_dR1 = dw_dphi1 * dphi1_dR1 + dw_dphi2 * dphi2_dR1;
